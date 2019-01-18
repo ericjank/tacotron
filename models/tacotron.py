@@ -131,14 +131,7 @@ class Tacotron():
                                             labels=self.stop_token_targets,
                                             logits=self.stop_token_outputs))
 
-      # Compute the regularization weights
-      reg_weight = 1e-6
-      all_vars = tf.trainable_variables()
-      self.regularization_loss = tf.add_n([tf.nn.l2_loss(v) for v in all_vars
-        if not('bias' in v.name or 'Bias' in v.name)]) * reg_weight
-
-      # self.loss = self.lf0_loss + self.mgc_loss + self.bap_loss + self.stop_token_loss + self.regularization_loss
-      self.loss = self.world_loss + self.stop_token_loss + self.regularization_loss
+      self.loss = self.world_loss + self.stop_token_loss
 
 
   def add_optimizer(self, global_step):
