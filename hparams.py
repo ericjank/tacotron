@@ -11,11 +11,10 @@ hparams = tf.contrib.training.HParams(
   fft_size=2048,
   n_f0=1,
   n_mgc=60,
-  n_sp=1025,
   n_ap=5,
   mcep_alpha=0.77, #0.58(16k) 0.65(22050) 0.76(44100)
   sample_rate=48000,
-  max_frame_num=5000,
+  max_frame_num=1600,
   frame_shift_ms=5.5,
 
   # Model:

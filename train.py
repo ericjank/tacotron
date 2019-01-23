@@ -34,6 +34,7 @@ def add_stats(model):
     # tf.summary.scalar('loss_lf0', model.lf0_loss)
     # tf.summary.scalar('loss_mgc', model.mgc_loss)
     # tf.summary.scalar('loss_bap', model.bap_loss)
+    tf.summary.scalar('regularization_loss', model.regularization_loss)
     tf.summary.scalar('stop_token_loss', model.stop_token_loss)
     tf.summary.scalar('learning_rate', model.learning_rate)
     tf.summary.scalar('loss', model.loss)

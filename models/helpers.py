@@ -93,11 +93,11 @@ class TacoTrainingHelper(Helper):
       finished = (time + 1 >= self._lengths)
 
       #Pick previous outputs randomly with respect to teacher forcing ratio
-      next_inputs = tf.cond(tf.less(tf.random_uniform([], minval=0, maxval=1, dtype=tf.float32), self._ratio),
-              lambda: self._targets[:, time, :], #Teacher-forcing: return true frame
-              lambda: outputs[:,-self._output_dim:])
+      # next_inputs = tf.cond(tf.less(tf.random_uniform([], minval=0, maxval=1, dtype=tf.float32), self._ratio),
+      #         lambda: self._targets[:, time, :], #Teacher-forcing: return true frame
+      #         lambda: outputs[:,-self._output_dim:])
 
-      # next_inputs = self._targets[:, time, :] # Teacher forcing: feed the true frame
+      next_inputs = self._targets[:, time, :] # Teacher forcing: feed the true frame
       return (finished, next_inputs, state)
 
 
