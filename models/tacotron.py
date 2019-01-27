@@ -4,7 +4,7 @@ from tensorflow.contrib.seq2seq import BasicDecoder
 from text.symbols import symbols
 from util.infolog import log
 from .helpers import TacoTestHelper, TacoTrainingHelper
-from .modules import encoder_cbhg, post_cbhg, prenet
+from .modules import encoder_cbhg, post_cbhg, prenet, ZoneoutLSTMCell
 from .rnn_wrappers import FrameProjection, StopProjection, TacotronDecoderWrapper
 from .attention import LocationSensitiveAttention
 from .custom_decoder import CustomDecoder
@@ -53,8 +53,10 @@ class Tacotron():
 
       # Decoder (layers specified bottom to top):
       multi_rnn_cell = MultiRNNCell([
-          ResidualWrapper(GRUCell(hp.decoder_depth)),
-          ResidualWrapper(GRUCell(hp.decoder_depth))
+          # ResidualWrapper(GRUCell(hp.decoder_depth)),
+          # ResidualWrapper(GRUCell(hp.decoder_depth))
+          ResidualWrapper(ZoneoutLSTMCell(hp.decoder_depth, is_training, zoneout_factor_cell=0.1, zoneout_factor_output=0.1)),
+          ResidualWrapper(ZoneoutLSTMCell(hp.decoder_depth, is_training, zoneout_factor_cell=0.1, zoneout_factor_output=0.1))
         ], state_is_tuple=True)                                                                    # [N, T_in, decoder_depth=256]
 
       # Frames Projection layer
