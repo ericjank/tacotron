@@ -31,9 +31,6 @@ def add_stats(model):
     tf.summary.histogram('mgc_targets', model.mgc_targets)
     tf.summary.histogram('bap_targets', model.bap_targets)
     tf.summary.scalar('loss_world', model.world_loss)
-    # tf.summary.scalar('loss_lf0', model.lf0_loss)
-    # tf.summary.scalar('loss_mgc', model.mgc_loss)
-    # tf.summary.scalar('loss_bap', model.bap_loss)
     tf.summary.scalar('regularization_loss', model.regularization_loss)
     tf.summary.scalar('stop_token_loss', model.stop_token_loss)
     tf.summary.scalar('learning_rate', model.learning_rate)
@@ -75,7 +72,7 @@ def train(log_dir, args):
   step = 0
   time_window = ValueWindow(100)
   loss_window = ValueWindow(100)
-  saver = tf.train.Saver(max_to_keep=5, keep_checkpoint_every_n_hours=2)
+  saver = tf.train.Saver(max_to_keep=1)
 
   # Train!
   with tf.Session() as sess:

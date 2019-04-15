@@ -88,20 +88,8 @@ class Tacotron():
       decoder_outputs = tf.reshape(decoder_outputs, [batch_size, -1, target_depth])                # [N, T_out, M]
       stop_token_outputs = tf.reshape(stop_token_outputs, [batch_size, -1])                        # [N, T_out, M]
 
-      # Add post-processing CBHG:
-      # post_outputs = post_cbhg(decoder_outputs, target_depth, is_training, hp.postnet_depth)       # [N, T_out, postnet_depth=256]
-      # final_outputs = tf.layers.dense(post_outputs, target_depth)                                  # [N, T_out, F]
-
-      # seperation
-      lf0_outputs = decoder_outputs[:, :, 0]
-      mgc_outputs = decoder_outputs[:, :, 1 : 1 + hp.n_mgc]
-      bap_outputs = decoder_outputs[:, :, 1 + hp.n_mgc:]
-
       self.inputs = inputs
       self.input_lengths = input_lengths
-      self.lf0_outputs = lf0_outputs
-      self.mgc_outputs = mgc_outputs
-      self.bap_outputs = bap_outputs
       self.world_outputs = decoder_outputs
       self.stop_token_outputs = stop_token_outputs
       self.alignments = alignments
@@ -114,9 +102,6 @@ class Tacotron():
       log('  prenet out:              {}'.format(prenet_outputs.shape))
       log('  encoder out:             {}'.format(encoder_outputs.shape))
       log('  decoder out (r frames):  {}'.format(decoder_outputs.shape))
-      log('  lf0 out (1 frame):       {}'.format(tf.expand_dims(lf0_outputs, axis=-1).shape))
-      log('  mgc out (1 frame):       {}'.format(mgc_outputs.shape))
-      log('  bap out (1 frame):       {}'.format(bap_outputs.shape))
       log('  stop token:              {}'.format(stop_token_outputs.shape))
 
 
@@ -125,9 +110,6 @@ class Tacotron():
     with tf.variable_scope('loss') as scope:
       hp = self._hparams
       self.world_targets = tf.concat([tf.expand_dims(self.lf0_targets, axis=-1), self.mgc_targets, self.bap_targets], axis=-1)
-      # self.lf0_loss = tf.reduce_mean(tf.abs(self.lf0_targets - self.lf0_outputs))
-      # self.mgc_loss = tf.reduce_mean(tf.abs(self.mgc_targets - self.mgc_outputs))
-      # self.bap_loss = tf.reduce_mean(tf.abs(self.bap_targets - self.bap_outputs))
       self.world_loss = tf.reduce_mean(tf.abs(self.world_targets - self.world_outputs))
       self.stop_token_loss = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(
                                             labels=self.stop_token_targets,
@@ -139,7 +121,6 @@ class Tacotron():
       self.regularization_loss = tf.add_n([tf.nn.l2_loss(v) for v in all_vars
         if not('bias' in v.name or 'Bias' in v.name)]) * reg_weight
 
-      # self.loss = self.lf0_loss + self.mgc_loss + self.bap_loss + self.stop_token_loss + self.regularization_loss
       self.loss = self.world_loss + self.stop_token_loss + self.regularization_loss
 
 
