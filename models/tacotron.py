@@ -113,14 +113,10 @@ class Tacotron():
     with tf.variable_scope('loss') as scope:
       hp = self._hparams
       self.mel_loss = tf.reduce_mean(tf.abs(self.mel_targets - self.mel_outputs))
+      self.linear_loss = tf.reduce_mean(tf.abs(self.linear_targets - self.linear_outputs))
       self.stop_token_loss = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(
                                             labels=self.stop_token_targets,
                                             logits=self.stop_token_outputs))
-
-      l1 = tf.abs(self.linear_targets - self.linear_outputs)
-      # Prioritize loss for frequencies under 4000 Hz.
-      n_priority_freq = int(4000 / (hp.sample_rate * 0.5) * hp.num_freq)
-      self.linear_loss = 0.5 * tf.reduce_mean(l1) + 0.5 * tf.reduce_mean(l1[:,:,0:n_priority_freq])
 
       # Compute the regularization weights
       reg_weight = 1e-6
