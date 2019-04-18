@@ -66,7 +66,7 @@ Pull requests are welcome!
    The following are supported out of the box:
     * [LJ Speech](https://keithito.com/LJ-Speech-Dataset/) (Public Domain)
     * [Blizzard 2012](http://www.cstr.ed.ac.uk/projects/blizzard/2012/phase_one) (Creative Commons Attribution Share-Alike)
-    * [Thchs30 中文语音训练素材](http://www.openslr.org/resources/18/data_thchs30.tgz)
+    * [Thchs30](http://www.openslr.org/resources/18/data_thchs30.tgz) (中文语音训练素材)
 
    You can use other datasets if you convert them to the right format. See [TRAINING_DATA.md](TRAINING_DATA.md) for more info.
 
