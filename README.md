@@ -66,43 +66,35 @@ Pull requests are welcome!
    The following are supported out of the box:
     * [LJ Speech](https://keithito.com/LJ-Speech-Dataset/) (Public Domain)
     * [Blizzard 2012](http://www.cstr.ed.ac.uk/projects/blizzard/2012/phase_one) (Creative Commons Attribution Share-Alike)
+    * [Thchs30 中文语音训练素材](http://www.openslr.org/resources/18/data_thchs30.tgz)
 
    You can use other datasets if you convert them to the right format. See [TRAINING_DATA.md](TRAINING_DATA.md) for more info.
 
 
 2. **Unpack the dataset into `~/tacotron`**
 
-   After unpacking, your tree should look like this for LJ Speech:
+   After unpacking, your tree should look like this for Thchs30:
    ```
    tacotron
-     |- LJSpeech-1.1
-         |- metadata.csv
-         |- wavs
+     |- data_thchs30
+         |- data
+         |- dev
+         |- lm_phone
+         |- lm_word
+         |- README.TXT
+         |- test
+         |- train
    ```
-
-   or like this for Blizzard 2012:
-   ```
-   tacotron
-     |- Blizzard2012
-         |- ATrampAbroad
-         |   |- sentence_index.txt
-         |   |- lab
-         |   |- wav
-         |- TheManThatCorruptedHadleyburg
-             |- sentence_index.txt
-             |- lab
-             |- wav
-   ```
+   
 
 3. **Preprocess the data**
    ```
-   python3 preprocess.py --dataset ljspeech
+   python3 preprocess.py --dataset thchs30
    ```
-     * Use `--dataset blizzard` for Blizzard data
 
 4. **Train a model**
    ```
-   python3 train.py
+   nohup python3 train.py --name thchs30 > training.log &
    ```
 
    Tunable hyperparameters are found in [hparams.py](hparams.py). You can adjust these at the command
